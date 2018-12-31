@@ -8,22 +8,26 @@ $id = $_POST['id'];
 $name=$_POST['name'];
 $age=$_POST['age'];
 $email=$_POST['email'];    
-$result = mysqli_query($mysqli, "UPDATE practice SET name='$name',age='$age',email='$email' WHERE id='$id'");
+$sql = "UPDATE practice SET name='$name',email='$email',age='$age' WHERE id=$id";
+
+if (mysqli_query($conn, $sql)) {
+    echo "Record updated successfully";
+}
 header("Location: index.php");
 }
 ?>
 <?php
-//getting id from url
 $id = $_GET['id'];
- 
-//selecting data associated with this particular id
-$result = mysqli_query($mysqli, "SELECT * FROM practice WHERE id='$id'");
- 
-while($res = mysqli_fetch_array($result))
+$sql ="SELECT * FROM practice WHERE id='$id'";
+$result= $conn->query($sql);
+if($result->num_rows > 0) 
 {
-    $name = $res['name'];
-    $age = $res['age'];
-    $email = $res['email'];
+while($row = $result->fetch_assoc())
+{
+$name = $row['name'];
+$age = $row['age'];
+$email = $row['email'];
+}
 }
 ?>
 <html>
@@ -39,15 +43,15 @@ while($res = mysqli_fetch_array($result))
         <table border="0">
             <tr> 
                 <td>Name</td>
-                <td><input type="text" name="name" value="<?php echo $uname;?>"></td>
+                <td><input type="text" name="name" value="<?php echo $name;?>"></td>
             </tr>
             <tr> 
                 <td>Age</td>
-                <td><input type="text" name="age" value="<?php echo $uage;?>"></td>
+                <td><input type="text" name="age" value="<?php echo $age;?>"></td>
             </tr>
             <tr> 
                 <td>Email</td>
-                <td><input type="text" name="email" value="<?php echo $uemail;?>"></td>
+                <td><input type="text" name="email" value="<?php echo $email;?>"></td>
             </tr>
             <tr>
                 <td><input type="hidden" name="id" value=<?php echo $_GET['id'];?>></td>
